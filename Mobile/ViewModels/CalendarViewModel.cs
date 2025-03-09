@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows.Input;
 using Mobile.Models;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Graphics;
 
 namespace Mobile.ViewModels
 {
@@ -29,6 +30,23 @@ namespace Mobile.ViewModels
         }
 
         public string CurrentMonthYear => $"{CurrentDate.ToString("MMMM")} {CurrentDate.Year}";
+
+        public string Title => "Календарь";
+
+        public string Description { get; set; }
+
+        public DateTime Deadline
+        {
+            get => CurrentDate;
+            set
+            {
+                if (CurrentDate != value)
+                {
+                    CurrentDate = value;
+                    OnPropertyChanged(nameof(Deadline));
+                }
+            }
+        }
 
         public ObservableCollection<Goal> TodayGoals
         {
@@ -107,7 +125,7 @@ namespace Mobile.ViewModels
                     Category = g.Category,
                     Progress = g.Progress,
                     Urgency = g.Urgency,
-                    Color = g.Color,
+                    Color = "#E8E6FF",
                     Image = g.Image
                 });
             allGoals.AddRange(dailyGoals);
@@ -124,7 +142,7 @@ namespace Mobile.ViewModels
                     Category = g.Category,
                     Progress = g.Progress,
                     Urgency = g.Urgency,
-                    Color = g.Color,
+                    Color = "#E8E6FF",
                     Image = g.Image
                 });
             allGoals.AddRange(mainGoals);

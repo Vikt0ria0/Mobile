@@ -35,27 +35,16 @@
 		<WindowsPackageType>None</WindowsPackageType>
 
 		<!-- Android Settings -->
-		<AndroidSdkDirectory Condition="'$(OS)' == 'Windows_NT'">$(LocalAppData)\Android\Sdk</AndroidSdkDirectory>
-		<AndroidSdkDirectory Condition="'$(OS)' != 'Windows_NT'">$(Home)/Library/Android/sdk</AndroidSdkDirectory>
 		<AndroidUseAapt2>true</AndroidUseAapt2>
-		<AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
-		<AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
 		<AndroidEnableMultiDex>true</AndroidEnableMultiDex>
 		<JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
 		<AndroidTargetFrameworkVersion>v33.0</AndroidTargetFrameworkVersion>
-		<AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
-		<AndroidHttpClientHandlerType>Microsoft.Maui.Handlers.AndroidHttpClientHandler</AndroidHttpClientHandlerType>
-		<AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
 		<EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
-		<RuntimeIdentifiers>android-arm64;android-arm;android-x86;android-x64</RuntimeIdentifiers>
-		<RunAOTCompilation>false</RunAOTCompilation>
-		<PublishTrimmed>false</PublishTrimmed>
 		<AndroidLinkMode>None</AndroidLinkMode>
-		<EnableLLVM>false</EnableLLVM>
 
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
@@ -95,7 +84,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.3" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="6.1.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />

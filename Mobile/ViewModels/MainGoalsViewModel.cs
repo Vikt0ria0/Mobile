@@ -27,6 +27,7 @@ namespace Mobile.ViewModels
         public ICommand EditGoalCommand { get; }
         public ICommand NavigateToCalendarCommand { get; }
         public ICommand NavigateToDailyGoalsCommand { get; }
+        public ICommand NavigateBackCommand { get; }
 
         public MainGoalsViewModel()
         {
@@ -38,6 +39,7 @@ namespace Mobile.ViewModels
             EditGoalCommand = new Command<MainGoal>(async (goal) => await EditGoal(goal));
             NavigateToCalendarCommand = new Command(async () => await Shell.Current.GoToAsync("//calendar"));
             NavigateToDailyGoalsCommand = new Command(async () => await Shell.Current.GoToAsync("//dailygoals"));
+            NavigateBackCommand = new Command(async () => await Shell.Current.GoToAsync("//dailygoals"));
         }
 
         private void LoadGoals()

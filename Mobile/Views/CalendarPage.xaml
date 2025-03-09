@@ -97,13 +97,13 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame Margin="0,5"
-                                   BackgroundColor="{StaticResource AccentColor}"
-                                   Opacity="0.2"
+                                   BackgroundColor="#E8E6FF"
+                                   Opacity="1"
                                    BorderColor="Transparent"
                                    CornerRadius="5"
                                    Padding="15,10"
                                    HasShadow="False">
-                                <Grid RowSpacing="2">
+                                <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
@@ -114,19 +114,19 @@
                                     </Grid.ColumnDefinitions>
 
                                     <Label Text="{Binding Title}"
-                                           TextColor="{StaticResource TextColor}"
+                                           TextColor="Black"
                                            FontSize="14"/>
                                     
                                     <Label Grid.Column="1"
                                            Text="{Binding Deadline, StringFormat='{0:HH:mm}'}"
-                                           TextColor="{StaticResource SubtextColor}"
+                                           TextColor="Black"
                                            FontSize="12"
                                            HorizontalOptions="End"/>
 
                                     <Label Grid.Row="1" 
                                            Grid.ColumnSpan="2"
                                            Text="{Binding Description}"
-                                           TextColor="{StaticResource SubtextColor}"
+                                           TextColor="Black"
                                            FontSize="12"
                                            LineBreakMode="TailTruncation"/>
                                 </Grid>
