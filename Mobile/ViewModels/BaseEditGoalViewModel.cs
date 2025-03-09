@@ -21,7 +21,7 @@ namespace Mobile.ViewModels
             }
         }
 
-        public string Description
+        public string Description 
         {
             get => _goal?.Description;
             set
