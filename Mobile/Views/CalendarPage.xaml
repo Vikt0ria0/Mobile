@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Mobile.ViewModels"
+             x:Class="Mobile.Views.CalendarPage"
+             x:DataType="vm:CalendarViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <Grid RowSpacing="0">
+        <Grid.GestureRecognizers>
+            <SwipeGestureRecognizer Direction="Right" Command="{Binding NavigateToMainGoalsCommand}"/>
+            <SwipeGestureRecognizer Direction="Left" Command="{Binding NavigateToDailyGoalsCommand}"/>
+        </Grid.GestureRecognizers>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок с кнопками навигации -->
+        <Grid Grid.Row="0" Margin="20,20,20,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Text="📋"
+                    FontSize="20"
+                    Command="{Binding NavigateToDailyGoalsCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="{StaticResource SubtextColor}"/>
+
+            <Label Text="Календарь"
+                   Grid.Column="1"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource TextColor}"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"/>
+
+            <Button Grid.Column="2"
+                    Text="🎯"
+                    FontSize="20"
+                    Command="{Binding NavigateToMainGoalsCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="{StaticResource SubtextColor}"/>
+        </Grid>
+
+        <!-- Месяц и год с навигацией -->
+        <Grid Grid.Row="1" Margin="20,10,20,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Text="←"
+                    Command="{Binding PreviousMonthCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="{StaticResource SubtextColor}"
+                    FontSize="20"/>
+
+            <Label Grid.Column="1"
+                   Text="{Binding CurrentMonthYear}"
+                   FontSize="16"
+                   TextColor="{StaticResource SubtextColor}"
+                   HorizontalOptions="Center"/>
+
+            <Button Grid.Column="2"
+                    Text="→"
+                    Command="{Binding NextMonthCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="{StaticResource SubtextColor}"
+                    FontSize="20"/>
+        </Grid>
+
+        <!-- Календарь -->
+        <Grid Grid.Row="2" Margin="20,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <DatePicker Date="{Binding CurrentDate}"
+                       TextColor="{StaticResource TextColor}"
+                       BackgroundColor="Transparent"
+                       FontSize="16"
+                       HorizontalOptions="Center"
+                       DateSelected="OnDateSelected"/>
+
+            <!-- Цели на выбранную дату -->
+            <ScrollView Grid.Row="1" Margin="0,20,0,60">
+                <CollectionView ItemsSource="{Binding TodayGoals}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Margin="0,5"
+                                   BackgroundColor="{StaticResource AccentColor}"
+                                   Opacity="0.2"
+                                   BorderColor="Transparent"
+                                   CornerRadius="5"
+                                   Padding="15,10"
+                                   HasShadow="False">
+                                <Grid RowSpacing="2">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Text="{Binding Title}"
+                                           TextColor="{StaticResource TextColor}"
+                                           FontSize="14"/>
+                                    
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Deadline, StringFormat='{0:HH:mm}'}"
+                                           TextColor="{StaticResource SubtextColor}"
+                                           FontSize="12"
+                                           HorizontalOptions="End"/>
+
+                                    <Label Grid.Row="1" 
+                                           Grid.ColumnSpan="2"
+                                           Text="{Binding Description}"
+                                           TextColor="{StaticResource SubtextColor}"
+                                           FontSize="12"
+                                           LineBreakMode="TailTruncation"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </ScrollView>
+        </Grid>
+
+        <!-- Кнопка "Сегодня" -->
+        <Button Grid.Row="2"
+                Text="Сегодня"
+                Command="{Binding GoToTodayCommand}"
+                BackgroundColor="{StaticResource SecondaryColor}"
+                TextColor="{StaticResource TextColor}"
+                CornerRadius="0"
+                HeightRequest="40"
+                VerticalOptions="End"
+                Margin="20,10"/>
+    </Grid>
+</ContentPage> 

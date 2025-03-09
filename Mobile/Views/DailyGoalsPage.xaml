@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Mobile.ViewModels"
+             xmlns:models="clr-namespace:Mobile.Models"
+             x:Class="Mobile.Views.DailyGoalsPage"
+             x:DataType="vm:DailyGoalsViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource BackgroundColor}"
+             Title="Цели на день">
+
+    <Grid x:Name="MainGrid">
+        <Grid.GestureRecognizers>
+            <SwipeGestureRecognizer Direction="Left" Command="{Binding NavigateToMainGoalsCommand}"/>
+        </Grid.GestureRecognizers>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок с кнопкой календаря -->
+        <Grid Grid.Row="0" Margin="20,20,20,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Text="Цели на день"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource PrimaryColor}"
+                   VerticalOptions="Center"/>
+
+            <Button Grid.Column="1"
+                    Text="📅"
+                    FontSize="20"
+                    Command="{Binding NavigateToCalendarCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="{StaticResource SubtextColor}"/>
+        </Grid>
+
+        <VerticalStackLayout Spacing="20" Padding="20">
+            <!-- Верхняя панель -->
+            <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto" Padding="20,10">
+                <Button Text="Основные"
+                        Command="{Binding NavigateToMainGoalsCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="{StaticResource SubtextColor}"/>
+                
+                <Label Grid.Column="1"
+                       Text="Ежедневные цели"
+                       HorizontalOptions="Center"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource PrimaryColor}"/>
+                
+                <Button Grid.Column="2"
+                        Text="Календарь"
+                        Command="{Binding NavigateToCalendarCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="{StaticResource SubtextColor}"/>
+            </Grid>
+
+            <!-- Список целей -->
+            <CollectionView ItemsSource="{Binding Goals}"
+                            Margin="0,20,0,0">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Goal">
+                        <Grid Padding="0,5">
+                            <Frame BackgroundColor="{StaticResource SecondaryColor}"
+                                   CornerRadius="15"
+                                   HasShadow="False"
+                                   Padding="15">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DailyGoalsViewModel}}, Path=EditGoalCommand}"
+                                                        CommandParameter="{Binding .}"/>
+                                </Frame.GestureRecognizers>
+                                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
+                                    <CheckBox Grid.RowSpan="2"
+                                             IsChecked="{Binding IsCompleted, Mode=TwoWay}"
+                                             Color="{StaticResource PrimaryColor}"
+                                             VerticalOptions="Center"/>
+                                    <VerticalStackLayout Grid.Column="1" Spacing="5">
+                                        <Label Text="{Binding Title}"
+                                               TextColor="{StaticResource TextColor}"
+                                               FontAttributes="Bold"
+                                               TextDecorations="{Binding IsCompleted, 
+                                                   Converter={StaticResource BoolToStrikethroughConverter}}"/>
+                                        <Label Text="{Binding Description}"
+                                               FontSize="12"
+                                               TextColor="{StaticResource SubtextColor}"
+                                               TextDecorations="{Binding IsCompleted, 
+                                                   Converter={StaticResource BoolToStrikethroughConverter}}"/>
+                                        <Grid ColumnDefinitions="Auto,*,Auto" 
+                                              ColumnSpacing="10">
+                                            <Label Text="{Binding Category}"
+                                                   FontSize="12"
+                                                   TextColor="{StaticResource PrimaryColor}"/>
+                                            <ProgressBar Grid.Column="1"
+                                                       Progress="{Binding Progress, Converter={StaticResource IntToDoubleConverter}}"
+                                                       ProgressColor="{StaticResource AccentColor}"
+                                                       VerticalOptions="Center"/>
+                                            <Label Grid.Column="2"
+                                                   Text="{Binding Deadline, StringFormat='{0:dd.MM.yyyy}'}"
+                                                   FontSize="12"
+                                                   TextColor="{StaticResource SubtextColor}"/>
+                                        </Grid>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Иллюстрация -->
+            <Image Source="working_girl.png"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   HeightRequest="200"
+                   IsVisible="{Binding HasNoGoals}"/>
+
+            <!-- Кнопка добавления -->
+            <Button Text="Добавить цель"
+                    BackgroundColor="{StaticResource PrimaryColor}"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="25"
+                    HeightRequest="50"
+                    Margin="0,20,0,0"
+                    Command="{Binding AddGoalCommand}"/>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage> 

@@ -1,0 +1,29 @@
+﻿<?xml version = "1.0" encoding = "UTF-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Mobile"
+             xmlns:converters="clr-namespace:Mobile.Converters"
+             x:Class="Mobile.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Цветовая схема -->
+            <Color x:Key="PrimaryColor">#4834D4</Color>
+            <Color x:Key="SecondaryColor">#E8E6FF</Color>
+            <Color x:Key="AccentColor">#6C5CE7</Color>
+            <Color x:Key="BackgroundColor">#FFFFFF</Color>
+            <Color x:Key="TextColor">#000000</Color>
+            <Color x:Key="SubtextColor">#666666</Color>
+
+            <!-- Конвертеры -->
+            <converters:BoolToStrikethroughConverter x:Key="BoolToStrikethroughConverter" />
+            <converters:IntToDoubleConverter x:Key="IntToDoubleConverter" />
+            <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
+            <converters:BoolToFontAttributesConverter x:Key="BoolToFontAttributesConverter"/>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

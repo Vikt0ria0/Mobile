@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Mobile.ViewModels"
+             x:Class="Mobile.Views.EditGoalPage"
+             x:DataType="vm:EditGoalViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <Grid x:Name="MainGrid">
+        <VerticalStackLayout Spacing="20" Padding="20">
+            <!-- Верхняя панель -->
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Button Text="Отмена"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="{StaticResource SubtextColor}"/>
+                
+                <Label Grid.Column="1"
+                       Text="Редактирование цели"
+                       HorizontalOptions="Center"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource PrimaryColor}"/>
+                
+                <Button Grid.Column="2"
+                        Text="Сохранить"
+                        Command="{Binding SaveCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="{StaticResource PrimaryColor}"
+                        FontAttributes="Bold"/>
+            </Grid>
+
+            <!-- Форма редактирования -->
+            <ScrollView>
+                <VerticalStackLayout Spacing="15">
+                    <!-- Название -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Название"
+                               TextColor="{StaticResource TextColor}"/>
+                        <Entry Text="{Binding Title}"
+                               Placeholder="Введите название цели"
+                               BackgroundColor="{StaticResource SecondaryColor}"
+                               TextColor="{StaticResource TextColor}"/>
+                    </VerticalStackLayout>
+
+                    <!-- Описание -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Описание"
+                               TextColor="{StaticResource TextColor}"/>
+                        <Editor Text="{Binding Description}"
+                                Placeholder="Введите описание"
+                                HeightRequest="100"
+                                BackgroundColor="{StaticResource SecondaryColor}"
+                                TextColor="{StaticResource TextColor}"/>
+                    </VerticalStackLayout>
+
+                    <!-- Категория -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Категория"
+                               TextColor="{StaticResource TextColor}"/>
+                        <Entry Text="{Binding Category}"
+                               Placeholder="Введите категорию"
+                               BackgroundColor="{StaticResource SecondaryColor}"
+                               TextColor="{StaticResource TextColor}"/>
+                    </VerticalStackLayout>
+
+                    <!-- Дедлайн -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Дедлайн"
+                               TextColor="{StaticResource TextColor}"/>
+                        <DatePicker Date="{Binding Deadline}"
+                                  BackgroundColor="{StaticResource SecondaryColor}"
+                                  TextColor="{StaticResource TextColor}"/>
+                    </VerticalStackLayout>
+
+                    <!-- Прогресс -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Прогресс"
+                               TextColor="{StaticResource TextColor}"/>
+                        <Slider Value="{Binding Progress}"
+                                Maximum="100"
+                                MinimumTrackColor="{StaticResource PrimaryColor}"
+                                MaximumTrackColor="{StaticResource SecondaryColor}"/>
+                        <Label Text="{Binding Progress, StringFormat='{0}%'}"
+                               HorizontalOptions="Center"
+                               TextColor="{StaticResource SubtextColor}"/>
+                    </VerticalStackLayout>
+
+                    <!-- Срочность (для основных целей) -->
+                    <VerticalStackLayout Spacing="5" IsVisible="{Binding IsMainGoal}">
+                        <Label Text="Срочность"
+                               TextColor="{StaticResource TextColor}"/>
+                        <Slider Value="{Binding Urgency}"
+                                Maximum="100"
+                                MinimumTrackColor="{StaticResource AccentColor}"
+                                MaximumTrackColor="{StaticResource SecondaryColor}"/>
+                        <Label Text="{Binding Urgency, StringFormat='{0}%'}"
+                               HorizontalOptions="Center"
+                               TextColor="{StaticResource SubtextColor}"/>
+                    </VerticalStackLayout>
+
+                    <!-- Статус выполнения -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Статус"
+                               TextColor="{StaticResource TextColor}"/>
+                        <HorizontalStackLayout>
+                            <CheckBox IsChecked="{Binding IsCompleted}"
+                                     Color="{StaticResource PrimaryColor}"/>
+                            <Label Text="Выполнено"
+                                   VerticalOptions="Center"
+                                   TextColor="{StaticResource TextColor}"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </ScrollView>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage> 
