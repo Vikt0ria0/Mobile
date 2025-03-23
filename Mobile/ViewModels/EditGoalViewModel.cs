@@ -1,147 +1,117 @@
 using System.ComponentModel;
 using System.Windows.Input;
 using Mobile.Models;
+using Mobile.UseCases;
 
 namespace Mobile.ViewModels
 {
-    [QueryProperty("Goal", "goal")]
     public class EditGoalViewModel : INotifyPropertyChanged
     {
-        private Goal _goal;
-        private bool _isMainGoal;
-        private MainGoal _mainGoal;
-        
-        public Goal Goal
+        private readonly EditGoalUseCase _useCase;
+        private string _goalId;
+        private EditGoalModel _goal;
+        private bool _isLoading;
+        private string _errorMessage;
+        private bool _hasError;
+
+        public EditGoalModel Goal
         {
             get => _goal;
             set
             {
                 _goal = value;
-                _mainGoal = value as MainGoal;
-                IsMainGoal = _mainGoal != null;
                 OnPropertyChanged(nameof(Goal));
             }
         }
-        
-        public bool IsMainGoal
+
+        public bool IsLoading
         {
-            get => _isMainGoal;
+            get => _isLoading;
             set
             {
-                _isMainGoal = value;
-                OnPropertyChanged(nameof(IsMainGoal));
+                _isLoading = value;
+                OnPropertyChanged(nameof(IsLoading));
             }
         }
 
-        public string Title
+        public string ErrorMessage
         {
-            get => _goal?.Title;
+            get => _errorMessage;
             set
             {
-                if (_goal != null)
-                {
-                    _goal.Title = value;
-                    OnPropertyChanged(nameof(Title));
-                }
+                _errorMessage = value;
+                OnPropertyChanged(nameof(ErrorMessage));
+                HasError = !string.IsNullOrEmpty(value);
             }
         }
 
-        public string Description
+        public bool HasError
         {
-            get => _goal?.Description;
+            get => _hasError;
             set
             {
-                if (_goal != null)
-                {
-                    _goal.Description = value;
-                    OnPropertyChanged(nameof(Description));
-                }
-            }
-        }
-
-        public string Category
-        {
-            get => _goal?.Category;
-            set
-            {
-                if (_goal != null)
-                {
-                    _goal.Category = value;
-                    OnPropertyChanged(nameof(Category));
-                }
-            }
-        }
-
-        public DateTime Deadline
-        {
-            get => _goal?.Deadline ?? DateTime.Now;
-            set
-            {
-                if (_goal != null)
-                {
-                    _goal.Deadline = value;
-                    OnPropertyChanged(nameof(Deadline));
-                }
-            }
-        }
-
-        public int Progress
-        {
-            get => _goal?.Progress ?? 0;
-            set
-            {
-                if (_goal != null)
-                {
-                    _goal.Progress = value;
-                    OnPropertyChanged(nameof(Progress));
-                }
-            }
-        }
-
-        public int Urgency
-        {
-            get => _mainGoal?.Urgency ?? 0;
-            set
-            {
-                if (_mainGoal != null)
-                {
-                    _mainGoal.Urgency = value;
-                    OnPropertyChanged(nameof(Urgency));
-                }
-            }
-        }
-
-        public bool IsCompleted
-        {
-            get => _goal?.IsCompleted ?? false;
-            set
-            {
-                if (_goal != null)
-                {
-                    _goal.IsCompleted = value;
-                    OnPropertyChanged(nameof(IsCompleted));
-                }
+                _hasError = value;
+                OnPropertyChanged(nameof(HasError));
             }
         }
 
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
 
-        public EditGoalViewModel()
+        public EditGoalViewModel(EditGoalUseCase useCase)
         {
-            SaveCommand = new Command(async () => await Save());
-            CancelCommand = new Command(async () => await Cancel());
+            _useCase = useCase;
+            SaveCommand = new Command(async () => await SaveGoal(), () => !IsLoading);
+            CancelCommand = new Command(async () => await Cancel(), () => !IsLoading);
         }
 
-        private async Task Save()
+        public async Task InitializeAsync(string goalId)
         {
-            // Возвращаемся на предыдущую страницу
-            await Shell.Current.GoToAsync("..");
+            try
+            {
+                _goalId = goalId;
+                IsLoading = true;
+                ErrorMessage = string.Empty;
+                Goal = await _useCase.GetGoalAsync(goalId);
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = "Не удалось загрузить данные";
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        private async Task SaveGoal()
+        {
+            try
+            {
+                IsLoading = true;
+                ErrorMessage = string.Empty;
+
+                var (success, error) = await _useCase.UpdateGoalAsync(_goalId, Goal);
+                if (!success)
+                {
+                    ErrorMessage = error;
+                    return;
+                }
+
+                await Shell.Current.GoToAsync("..");
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = "Произошла ошибка при сохранении";
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         private async Task Cancel()
         {
-            // Возвращаемся на предыдущую страницу без сохранения
             await Shell.Current.GoToAsync("..");
         }
 

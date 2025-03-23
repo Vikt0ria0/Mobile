@@ -4,115 +4,71 @@
              xmlns:vm="clr-namespace:Mobile.ViewModels"
              x:Class="Mobile.Views.EditGoalPage"
              x:DataType="vm:EditGoalViewModel"
-             Shell.NavBarIsVisible="False"
-             BackgroundColor="{StaticResource BackgroundColor}">
+             Title="Редактирование цели">
 
-    <Grid x:Name="MainGrid">
-        <VerticalStackLayout Spacing="20" Padding="20">
-            <!-- Верхняя панель -->
-            <Grid ColumnDefinitions="Auto,*,Auto">
-                <Button Text="Отмена"
-                        Command="{Binding CancelCommand}"
-                        BackgroundColor="Transparent"
-                        TextColor="{StaticResource SubtextColor}"/>
-                
-                <Label Grid.Column="1"
-                       Text="Редактирование цели"
-                       HorizontalOptions="Center"
-                       FontAttributes="Bold"
-                       TextColor="{StaticResource PrimaryColor}"/>
-                
-                <Button Grid.Column="2"
-                        Text="Сохранить"
-                        Command="{Binding SaveCommand}"
-                        BackgroundColor="Transparent"
-                        TextColor="{StaticResource PrimaryColor}"
-                        FontAttributes="Bold"/>
-            </Grid>
+    <Grid RowDefinitions="Auto,*,Auto" Padding="20">
+        <!-- Индикатор загрузки -->
+        <ActivityIndicator IsVisible="{Binding IsLoading}"
+                         IsRunning="{Binding IsLoading}"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         Grid.RowSpan="3"/>
 
-            <!-- Форма редактирования -->
-            <ScrollView>
-                <VerticalStackLayout Spacing="15">
-                    <!-- Название -->
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Название"
-                               TextColor="{StaticResource TextColor}"/>
-                        <Entry Text="{Binding Title}"
-                               Placeholder="Введите название цели"
-                               BackgroundColor="{StaticResource SecondaryColor}"
-                               TextColor="{StaticResource TextColor}"/>
-                    </VerticalStackLayout>
+        <!-- Сообщение об ошибке -->
+        <Label Text="{Binding ErrorMessage}"
+               IsVisible="{Binding HasError}"
+               TextColor="Red"
+               HorizontalOptions="Center"/>
 
-                    <!-- Описание -->
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Описание"
-                               TextColor="{StaticResource TextColor}"/>
-                        <Editor Text="{Binding Description}"
-                                Placeholder="Введите описание"
-                                HeightRequest="100"
-                                BackgroundColor="{StaticResource SecondaryColor}"
-                                TextColor="{StaticResource TextColor}"/>
-                    </VerticalStackLayout>
+        <!-- Форма редактирования -->
+        <ScrollView Grid.Row="1" IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}">
+            <VerticalStackLayout Spacing="15">
+                <Label Text="Название"/>
+                <Entry Text="{Binding Goal.Title}"
+                       Placeholder="Введите название цели"/>
 
-                    <!-- Категория -->
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Категория"
-                               TextColor="{StaticResource TextColor}"/>
-                        <Entry Text="{Binding Category}"
-                               Placeholder="Введите категорию"
-                               BackgroundColor="{StaticResource SecondaryColor}"
-                               TextColor="{StaticResource TextColor}"/>
-                    </VerticalStackLayout>
+                <Label Text="Описание"/>
+                <Editor Text="{Binding Goal.Description}"
+                        Placeholder="Введите описание цели"
+                        HeightRequest="100"/>
 
-                    <!-- Дедлайн -->
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Дедлайн"
-                               TextColor="{StaticResource TextColor}"/>
-                        <DatePicker Date="{Binding Deadline}"
-                                  BackgroundColor="{StaticResource SecondaryColor}"
-                                  TextColor="{StaticResource TextColor}"/>
-                    </VerticalStackLayout>
+                <Label Text="Категория"/>
+                <Entry Text="{Binding Goal.Category}"
+                       Placeholder="Введите категорию"/>
 
-                    <!-- Прогресс -->
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Прогресс"
-                               TextColor="{StaticResource TextColor}"/>
-                        <Slider Value="{Binding Progress}"
-                                Maximum="100"
-                                MinimumTrackColor="{StaticResource PrimaryColor}"
-                                MaximumTrackColor="{StaticResource SecondaryColor}"/>
-                        <Label Text="{Binding Progress, StringFormat='{0}%'}"
-                               HorizontalOptions="Center"
-                               TextColor="{StaticResource SubtextColor}"/>
-                    </VerticalStackLayout>
+                <Label Text="Дедлайн"/>
+                <DatePicker Date="{Binding Goal.Deadline}"/>
 
-                    <!-- Срочность (для основных целей) -->
-                    <VerticalStackLayout Spacing="5" IsVisible="{Binding IsMainGoal}">
-                        <Label Text="Срочность"
-                               TextColor="{StaticResource TextColor}"/>
-                        <Slider Value="{Binding Urgency}"
-                                Maximum="100"
-                                MinimumTrackColor="{StaticResource AccentColor}"
-                                MaximumTrackColor="{StaticResource SecondaryColor}"/>
-                        <Label Text="{Binding Urgency, StringFormat='{0}%'}"
-                               HorizontalOptions="Center"
-                               TextColor="{StaticResource SubtextColor}"/>
-                    </VerticalStackLayout>
+                <Label Text="Прогресс"/>
+                <Slider Value="{Binding Goal.Progress}"
+                        Maximum="100"
+                        Minimum="0"/>
+                <Label Text="{Binding Goal.Progress, StringFormat='{0}%'}"
+                       HorizontalOptions="Center"/>
 
-                    <!-- Статус выполнения -->
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Статус"
-                               TextColor="{StaticResource TextColor}"/>
-                        <HorizontalStackLayout>
-                            <CheckBox IsChecked="{Binding IsCompleted}"
-                                     Color="{StaticResource PrimaryColor}"/>
-                            <Label Text="Выполнено"
-                                   VerticalOptions="Center"
-                                   TextColor="{StaticResource TextColor}"/>
-                        </HorizontalStackLayout>
-                    </VerticalStackLayout>
-                </VerticalStackLayout>
-            </ScrollView>
-        </VerticalStackLayout>
+                <Label Text="Срочность"/>
+                <Slider Value="{Binding Goal.Urgency}"
+                        Maximum="100"
+                        Minimum="0"/>
+                <Label Text="{Binding Goal.Urgency, StringFormat='{0}%'}"
+                       HorizontalOptions="Center"/>
+
+                <CheckBox IsChecked="{Binding Goal.IsCompleted}"/>
+                <Label Text="Завершено"
+                       HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Кнопки -->
+        <Grid Grid.Row="2" 
+              ColumnDefinitions="*,*" 
+              ColumnSpacing="20"
+              IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}">
+            <Button Text="Отмена"
+                    Command="{Binding CancelCommand}"/>
+            <Button Text="Сохранить"
+                    Command="{Binding SaveCommand}"
+                    Grid.Column="1"/>
+        </Grid>
     </Grid>
 </ContentPage> 

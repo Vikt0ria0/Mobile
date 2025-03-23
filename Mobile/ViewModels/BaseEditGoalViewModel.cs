@@ -6,42 +6,42 @@ namespace Mobile.ViewModels
 {
     public abstract class BaseEditGoalViewModel : INotifyPropertyChanged
     {
-        protected Goal _goal;
+        protected Goal? _goal;
 
-        public string Title
+        public string? Title
         {
             get => _goal?.Title;
             set
             {
                 if (_goal != null)
                 {
-                    _goal.Title = value;
+                    _goal.Title = value ?? string.Empty;
                     OnPropertyChanged(nameof(Title));
                 }
             }
         }
 
-        public string Description 
+        public string? Description 
         {
             get => _goal?.Description;
             set
             {
                 if (_goal != null)
                 {
-                    _goal.Description = value;
+                    _goal.Description = value ?? string.Empty;
                     OnPropertyChanged(nameof(Description));
                 }
             }
         }
 
-        public string Category
+        public string? Category
         {
             get => _goal?.Category;
             set
             {
                 if (_goal != null)
                 {
-                    _goal.Category = value;
+                    _goal.Category = value ?? string.Empty;
                     OnPropertyChanged(nameof(Category));
                 }
             }
@@ -86,8 +86,8 @@ namespace Mobile.ViewModels
             }
         }
 
-        public ICommand SaveCommand { get; }
-        public ICommand CancelCommand { get; }
+        public ICommand? SaveCommand { get; protected set; }
+        public ICommand? CancelCommand { get; protected set; }
 
         protected BaseEditGoalViewModel()
         {
@@ -105,7 +105,7 @@ namespace Mobile.ViewModels
             await Shell.Current.GoToAsync("..");
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
